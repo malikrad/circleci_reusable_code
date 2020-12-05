@@ -4,6 +4,12 @@ commands:
   print_pipeline_id:
     steps:
       - run: echo ${CIRCLE_WORKFLOW_ID}
+  print_pipeline_id_param:
+    id:
+      type: string
+    steps:
+      - run: echo << parametres.id >>
+    
 
 jobs:
   my_job:
@@ -11,8 +17,15 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - print_pipeline_id
+  my_job_param:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - print_pipeline_id_param:
+          id: << pipeline.id >>
 
 workflows:
   my_workflow:
     jobs:
       - my_job
+      - my_job_param
